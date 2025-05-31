@@ -1,9 +1,8 @@
-// @ts-check
+// astro.config.mjs
+
 import { defineConfig } from 'astro/config';
 
-
-// https://astro.build/config
 export default defineConfig({
-    site:'https://01JuanCarlos.github.io',
-    base:'01JuanCarlos.github.io',
+  site: 'https://01JuanCarlos.github.io',
+  base: '/', // ✅ GitHub Pages en usuario.github.io no necesita subcarpeta
 });
