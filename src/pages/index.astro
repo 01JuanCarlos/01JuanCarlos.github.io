@@ -1,18 +1,72 @@
 ---
-import fs from 'fs';
-import matter from 'gray-matter';
+import fs from "fs";
+import matter from "gray-matter";
 
-const file = fs.readFileSync('./content/home.md', 'utf-8');
-const { data, content } = matter(file);
+interface Section {
+	title: string;
+	text: string;
+	image: string;
+}
+
+interface ContentData {
+	title: string;
+	heroText: string;
+	sections: Section[];
+	gallery: string[];
+}
+
+const file = fs.readFileSync("./content/home.md", "utf8");
+const { data } = matter(file) as unknown as { data: ContentData };
 ---
 
-<html>
-  <head>
-    <title>{data.title}</title>
-  </head>
-  <body>
-    <h1>{data.title}</h1>
-    <p>{data.description}</p>
-    <div>{content}</div>
-  </body>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<title>{data.title}</title>
+	</head>
+	<body class="font-sans text-gray-800 bg-white">
+		<!-- Navegación -->
+		<nav class="bg-gray-900 text-white px-6 py-4 sticky top-0 z-10 flex gap-4">
+			<a href="#hero" class="hover:underline">Inicio</a>
+			{
+				data.sections.map((s, i) => (
+					<a href={`#section${i + 1}`} class="hover:underline">{s.title}</a>
+				))
+			}
+			<a href="#galeria" class="hover:underline">Galería</a>
+		</nav>
+
+		<!-- Hero -->
+		<section id="hero" class="py-16 text-center bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+			<h1 class="text-4xl font-bold">{data.heroText}</h1>
+		</section>
+
+		<!-- Secciones -->
+		{
+			data.sections.map((s, i) => (
+				<section id={`section${i + 1}`} class="px-6 py-12 text-center">
+					<h2 class="text-2xl font-semibold mb-4">{s.title}</h2>
+					<p class="mb-4">{s.text}</p>
+					<img src={s.image} alt={s.title} class="mx-auto rounded-lg shadow-lg max-w-full h-auto" />
+				</section>
+			))
+		}
+
+		<!-- Galería -->
+		<section id="galeria" class="bg-gray-100 py-16 px-6">
+			<h2 class="text-3xl font-bold text-center mb-10">Galería</h2>
+			<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 max-w-6xl mx-auto">
+				{
+					data.gallery.map((img, i) => (
+						<img
+							src={img}
+							alt={`Imagen ${i + 1}`}
+							class="rounded-lg shadow-md hover:scale-105 transition-transform duration-200 object-cover w-full h-48"
+							loading="lazy"
+						/>
+					))
+				}
+			</div>
+		</section>
+	</body>
 </html>
