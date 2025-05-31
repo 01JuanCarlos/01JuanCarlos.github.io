@@ -1,8 +1,9 @@
+# .github/workflows/deploy.yml
 name: Deploy Astro site to GitHub Pages
 
 on:
   push:
-    branches: [main]  # Usa 'main' o 'master' según tu caso
+    branches: [main]  # o "master", según tu rama principal
 
 jobs:
   build:
@@ -27,4 +28,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
-          publish_branch: gh-pages  # 👈 asegúrate de indicar la rama
+          publish_branch: gh-pages
